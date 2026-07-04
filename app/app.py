@@ -1,12 +1,25 @@
 from flask import Flask
-from prometheus_client import Counter, generate_latest
+from prometheus_client import Counter, Info, generate_latest
 import time
 import random
 import os
 
-#Create Flask app and generate metrics
-app=Flask(__name__)
-requests_counter = Counter('web_requests_total', 'Total number of requests')
+# Create Flask app and generate metrics
+app = Flask(__name__)
+
+requests_counter = Counter(
+    "web_requests_total",
+    "Total number of requests"
+)
+
+app_info = Info(
+    "platforms_app",
+    "Platform Lab application information"
+)
+
+app_info.info({
+    "version": "1.0.0"
+})
 
 # Define routes
 @app.route("/")
