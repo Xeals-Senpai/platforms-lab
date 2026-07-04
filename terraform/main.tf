@@ -5,6 +5,12 @@ resource "docker_image" "web" {
     context    = "${path.module}/../app"
     dockerfile = "Dockerfile"
   }
+
+  triggers = {
+    app_py           = filesha256("${path.module}/../app/app.py")
+    dockerfile       = filesha256("${path.module}/../app/Dockerfile")
+    requirements_txt = filesha256("${path.module}/../app/requirements.txt")
+  }
 }
 
 resource "docker_network" "platforms_lab" {
