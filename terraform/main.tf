@@ -8,7 +8,7 @@ resource "docker_image" "web" {
 
   triggers = {
     app_py           = filesha256("${path.module}/../app/app.py")
-    dockerfile       = filesha256("${path.module}/../app/Dockerfile")
+    dockerfile       = filesha256("${path.module}/../app/dockerfile")
     requirements_txt = filesha256("${path.module}/../app/requirements.txt")
   }
 }
