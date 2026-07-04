@@ -1,13 +1,37 @@
-- name: Configure Docker container
+- name: Deploy platforms-lab Flask stack
   hosts: web
   become: false
-  tasks:
-    - name: Run apt-get update inside the container
-      community.docker.docker_container_exec:
-        container: web-container
-        command: apt-get update
 
-    - name: Install curl inside the container
-      community.docker.docker_container_exec:
-        container: web-container
-        command: apt-get install -y curl
+  vars:
+    project_dir: "{{ playbook_dir }}/.."
+    app_url: "http://localhost:5050/health"
+
+  tasks:
+    - name: Validate Docker is installed
+      command: docker --version
+      changed_when: false
+
+    - name: Validate Docker Compose is available
+      command: docker compose version
+      changed_when: false
+
+    - name: Validate Docker Compose configuration
+      command: docker compose config
+      args:
+        chdir: "{{ project_dir }}"
+      changed_when: false
+
+    - name: Build and start Docker Compose stack
+      command: docker compose up -d --build
+      args:
+        chdir: "{{ project_dir }}"
+
+    - name: Wait for Flask health endpoint
+      uri:
+        url: "{{ app_url }}"
+        method: GET
+        status_code: 200
+      register: health_check
+      retries: 10
+      delay: 3
+      until: health_check.status == 200

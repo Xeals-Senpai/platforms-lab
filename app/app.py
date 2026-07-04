@@ -29,7 +29,7 @@ def random_response():
         raise Exception("Random failure occurred!")
     return "No failure this time!\n"
 
-# Simulates a High CPU load
+# Simulates a high CPU load
 @app.route("/load")
 def load():
     requests_counter.inc()
@@ -47,6 +47,24 @@ def crash():
 @app.route("/metrics")
 def metrics():
     return generate_latest(), 200, {'Content-Type': 'text/plain; charset=utf-8'}
+
+# Health endpoint
+@app.route("/health")
+def health():
+    requests_counter.inc()
+    return {"status": "healthy"}, 200
+
+# Ready endpoint
+@app.route("/ready")
+def ready():
+    requests_counter.inc()
+    return {"status": "ready"}, 200
+
+# Version endpoint
+@app.route("/version")
+def version():
+    requests_counter.inc()
+    return {"version": "1.0.0"}, 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=5050)
