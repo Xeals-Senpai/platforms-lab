@@ -120,10 +120,6 @@
             "steps": [
               {
                 "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -680,5 +676,5 @@
   "timezone": "browser",
   "title": "Platforms Lab - Flask Application",
   "uid": "e833cca4-15a5-4cd6-8258-14c697821ca0",
-  "version": 11
+  "version": 13
 }
