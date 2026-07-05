@@ -1,0 +1,40 @@
+name: CD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform-plan:
+    runs-on:
+      - self-hosted
+      - deployment-runner
+
+    defaults:
+      run:
+        shell: powershell -ExecutionPolicy Bypass -File {0}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show runner context
+        run: |
+          Write-Host "Running on self-hosted runner"
+          hostname
+          whoami
+          Get-Location
+
+      - name: Check Terraform version
+        run: terraform version
+
+      - name: Terraform fmt check
+        run: terraform -chdir=terraform fmt -check
+
+      - name: Terraform init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform validate
+        run: terraform -chdir=terraform validate
+
+      - name: Terraform plan
+        run: terraform -chdir=terraform plan
