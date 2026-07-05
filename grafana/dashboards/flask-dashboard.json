@@ -239,7 +239,7 @@
                 "1": {
                   "color": "green",
                   "index": 0,
-                  "text": "1.0.0"
+                  "text": "1.1.0"
                 }
               },
               "type": "value"
@@ -769,5 +769,5 @@
   "timezone": "browser",
   "title": "Platforms Lab - Flask Application",
   "uid": "e833cca4-15a5-4cd6-8258-14c697821ca0",
-  "version": 17
+  "version": 1
 }
