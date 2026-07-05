@@ -1,5 +1,5 @@
-from flask import Flask
-from prometheus_client import Counter, Info, generate_latest
+from flask import Flask, request
+from prometheus_client import Counter, Info, Histogram, generate_latest
 import time
 import random
 import os
@@ -10,6 +10,11 @@ app = Flask(__name__)
 requests_counter = Counter(
     "web_requests_total",
     "Total number of requests"
+)
+
+request_latency = Histogram(
+    "web_request_duration_seconds",
+    "Time spent processing requests"
 )
 
 app_info = Info(
@@ -24,20 +29,17 @@ app_info.info({
 # Define routes
 @app.route("/")
 def hello():
-    requests_counter.inc()
     return "Hello World from Flask with Docker, Ansible and Prometheus!\n"
 
 # Simulates a slow request
 @app.route("/slow")
 def slow():
-    requests_counter.inc()
     time.sleep(10)
     return "Simulating a slow request...\n"
 
 # Simulates random failures
 @app.route("/random")
 def random_response():
-    requests_counter.inc()
     if random.random() < 0.5:
         raise Exception("Random failure occurred!")
     return "No failure this time!\n"
@@ -45,14 +47,12 @@ def random_response():
 # Simulates a high CPU load
 @app.route("/load")
 def load():
-    requests_counter.inc()
     total = sum(range(10**7))  # Simulates CPU load
     return f"Simulated CPU load total: {total}\n"
 
 # Simulates a crash
 @app.route("/crash")
 def crash():
-    requests_counter.inc()
     os._exit(1)  # Simulate a crash by exiting the process
     return "This will never show, crash initiated!\n"
 
@@ -64,20 +64,30 @@ def metrics():
 # Health endpoint
 @app.route("/health")
 def health():
-    requests_counter.inc()
     return {"status": "healthy"}, 200
 
 # Ready endpoint
 @app.route("/ready")
 def ready():
-    requests_counter.inc()
     return {"status": "ready"}, 200
 
 # Version endpoint
 @app.route("/version")
 def version():
-    requests_counter.inc()
     return {"version": "1.0.0"}, 200
+
+@app.before_request
+def start_timer():
+    request.start_time = time.time()
+
+
+@app.after_request
+def record_request_metrics(response):
+    if request.path != "/metrics":
+        requests_counter.inc()
+        request_latency.observe(time.time() - request.start_time)
+
+    return response
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=5050)
