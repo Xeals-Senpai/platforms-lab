@@ -27,7 +27,7 @@ resource "docker_image" "grafana" {
 
 resource "docker_container" "web" {
   name  = "web-container"
-  image = docker_image.web.name
+  image = docker_image.web.image_id
 
   networks_advanced {
     name = docker_network.platforms_lab.name

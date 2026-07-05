@@ -28,7 +28,7 @@ app_info = Info(
 )
 
 app_info.info({
-    "version": "1.0.0"
+    "version": "1.1.0"
 })
 
 # Define routes
@@ -82,7 +82,7 @@ def ready():
 # Version endpoint
 @app.route("/version")
 def version():
-    return {"version": "1.0.0"}, 200
+    return {"version": "1.1.0"}, 200
 
 @app.before_request
 def start_timer():
