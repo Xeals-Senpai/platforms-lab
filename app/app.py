@@ -17,6 +17,11 @@ request_latency = Histogram(
     "Time spent processing requests"
 )
 
+error_counter = Counter(
+    "web_errors_total",
+    "Total number of application errors"
+)
+
 app_info = Info(
     "platforms_app",
     "Platform Lab application information"
@@ -41,7 +46,9 @@ def slow():
 @app.route("/random")
 def random_response():
     if random.random() < 0.5:
+        error_counter.inc()
         raise Exception("Random failure occurred!")
+
     return "No failure this time!\n"
 
 # Simulates a high CPU load
@@ -53,6 +60,7 @@ def load():
 # Simulates a crash
 @app.route("/crash")
 def crash():
+    error_counter.inc()
     os._exit(1)  # Simulate a crash by exiting the process
     return "This will never show, crash initiated!\n"
 
@@ -80,7 +88,6 @@ def version():
 def start_timer():
     request.start_time = time.time()
 
-
 @app.after_request
 def record_request_metrics(response):
     if request.path != "/metrics":
@@ -90,4 +97,4 @@ def record_request_metrics(response):
     return response
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5050)
+    app.run(host="0.0.0.0", port=5050)
