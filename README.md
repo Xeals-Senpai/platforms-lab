@@ -2,11 +2,11 @@
 
 [![CI Pipeline](https://github.com/Xeals-Senpai/platforms-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Xeals-Senpai/platforms-lab/actions/workflows/ci.yml)
 
-Personal Platform Engineering and DevOps learning environment.
+End-to-end Platform Engineering and DevOps learning environment demonstrating Infrastructure as Code, observability, incident simulation, CI, and automated CD using Terraform, Docker, Prometheus, Grafana, Flask, and GitHub Actions.
 
 ## Overview
 
-Platforms Lab is a local infrastructure playground used to learn, experiment with, and demonstrate modern DevOps and Platform Engineering concepts using Infrastructure as Code, monitoring, observability, and automation tools.
+Platforms Lab is a local infrastructure playground used to learn, experiment with, and demonstrate modern DevOps and Platform Engineering concepts using Infrastructure as Code, monitoring, observability, alerting, incident simulation, and deployment automation.
 
 The project is intentionally built using local Docker infrastructure to provide a safe and cost-effective environment for testing and troubleshooting without requiring cloud resources.
 
@@ -14,35 +14,41 @@ Current technologies include:
 
 - Terraform
 - Docker
+- Flask
 - Prometheus
 - Grafana
-- Flask
 - GitHub Actions
-- Ansible (work in progress)
+- Self-Hosted GitHub Runner
+- Ansible
 
-The repository serves as a long-term learning platform where new technologies and operational scenarios can be added and explored over time.
+The repository serves as a long-term learning platform where new technologies, operational scenarios, monitoring strategies, and deployment workflows can be added and explored over time.
 
 ---
 
 ## Current Architecture
 
 ```text
-platforms-lab-network
+GitHub
 │
-├── web-container
-│   ├── Flask Application
-│   └── Prometheus Metrics Endpoint
+├── GitHub Actions (CI)
 │
-├── prometheus
-│   └── Scrapes Application and Host Metrics
-│
-└── grafana
-    └── Visualises Metrics and Dashboards
+└── GitHub Actions (CD)
+    │
+    └── Self-Hosted Runner
+         │
+         └── Terraform
+              │
+              ├── Docker Network
+              ├── Flask Application
+              ├── Prometheus
+              └── Grafana
 
-Host Machine
+Monitoring Stack
 │
-└── Windows Exporter
-    └── Exposes System Metrics
+├── Flask Metrics
+├── Windows Exporter
+├── Prometheus
+└── Grafana
 ```
 
 ---
@@ -62,7 +68,7 @@ Terraform is used as the primary Infrastructure as Code tool for the project.
 
 ### Flask Application
 
-The sample Flask application provides a basic web service and exposes Prometheus metrics.
+The Flask application provides a simple web service while exposing Prometheus metrics for monitoring and alerting.
 
 Available routes:
 
@@ -70,12 +76,15 @@ Available routes:
 |---------|---------|
 | `/` | Basic application response |
 | `/metrics` | Prometheus metrics endpoint |
-| `/slow` | Simulates a slow response |
-| `/random` | Simulates random failures |
+| `/health` | Health probe |
+| `/ready` | Readiness probe |
+| `/version` | Application version |
+| `/slow` | Simulates slow responses |
+| `/random` | Simulates intermittent failures |
 | `/load` | Simulates high CPU load |
-| `/crash` | Simulates an application crash |
+| `/crash` | Simulates application crashes |
 
-These routes are used to create realistic troubleshooting and monitoring scenarios.
+These routes are used to create realistic monitoring, troubleshooting, and incident response scenarios.
 
 ### Prometheus
 
@@ -88,7 +97,7 @@ Metrics can be inspected directly through the Prometheus UI.
 
 ### Grafana
 
-Grafana provides visualisation and dashboarding for collected metrics.
+Grafana provides dashboarding, visualisation, and alerting for collected metrics.
 
 Configuration is provisioned automatically through:
 
@@ -110,6 +119,8 @@ platforms-lab/
 │
 ├── .github/
 │   └── workflows/
+│       ├── ci.yml
+│       └── cd.yml
 │
 ├── ansible/
 │   ├── inventory.ini
@@ -128,6 +139,7 @@ platforms-lab/
 │   └── prometheus.yml
 │
 ├── scripts/
+│   └── deploy.sh
 │
 ├── terraform/
 │   ├── versions.tf
@@ -141,7 +153,7 @@ platforms-lab/
 
 ---
 
-## Monitoring Stack
+## Monitoring and Alerting
 
 ### Prometheus Targets
 
@@ -150,44 +162,102 @@ Current scrape targets:
 - Flask application (`web-container`)
 - Windows Exporter (`host.docker.internal:9182`)
 
-### Grafana Dashboards
+### Grafana Dashboard
 
-Current dashboards:
+Current dashboard:
 
-- Windows Infrastructure Dashboard
+**Platforms Lab - Flask Application**
 
-Future dashboards:
+Includes:
 
-- Application Metrics Dashboard
-- Alerting Dashboard
-- Container Monitoring Dashboard
+- Service Status
+- Total Requests
+- Uptime
+- Version
+- Requests per Second
+- Memory Usage
+- CPU Usage
+- Average Response Time
+- Application Errors
+
+### Alerting
+
+Configured alerts:
+
+- Flask Service Down
+- Slow Response Time
+- High CPU Usage
+- Application Errors
+
+The application intentionally exposes failure scenarios to validate monitoring and alert behaviour.
+
+---
+
+## Manual Continuous Delivery
+
+Manual deployments are performed using:
+
+```bash
+./scripts/deploy.sh
+```
+
+The deployment script automatically:
+
+- Formats Terraform
+- Validates Terraform
+- Generates a Terraform plan
+- Applies infrastructure changes
+
+Deployments can be executed from any repository location through automatic path discovery.
+
+---
+
+## Automated Continuous Delivery
+
+Automated deployments are performed through GitHub Actions using a self-hosted runner.
+
+Workflow:
+
+```text
+Git Push
+    ↓
+GitHub Actions
+    ↓
+Self-Hosted Runner
+    ↓
+Terraform Plan
+    ↓
+Terraform Apply
+    ↓
+Deployment
+```
+
+The self-hosted runner is configured as a Windows service and automatically starts with the host machine.
 
 ---
 
 ## Deployment
 
-### Terraform
-
-Initialise Terraform:
+### Initialise Terraform
 
 ```bash
 cd terraform
 terraform init
 ```
 
-Validate configuration:
+### Validate Terraform
 
 ```bash
 terraform validate
 ```
 
-Review changes:
+### Review Changes
 
 ```bash
 terraform plan
 ```
 
-Deploy infrastructure:
+### Deploy Infrastructure
 
 ```bash
 terraform apply
@@ -233,17 +303,21 @@ This repository is used to explore:
 - Monitoring and Observability
 - Grafana Provisioning
 - Prometheus Configuration
-- CI Validation
-- Failure Simulation
+- Alerting
+- Incident Simulation
+- GitHub Actions
+- Continuous Integration
+- Continuous Delivery
+- Self-Hosted Runners
 - Troubleshooting and Root Cause Analysis
 - Platform Engineering Concepts
 - Configuration Management
 
 ---
 
-## Current Status
+## Project Progress
 
-Implemented:
+Completed:
 
 - Terraform-managed infrastructure
 - Docker networking
@@ -251,20 +325,24 @@ Implemented:
 - Prometheus monitoring
 - Grafana provisioning
 - Dashboard provisioning
-- GitHub Actions validation
+- Alerting
+- Incident simulation
+- Manual Continuous Delivery
+- Automated Continuous Delivery
+- GitHub Actions CI
+- Self-Hosted GitHub Actions Runner
 
-Planned:
+Future Improvements:
 
-- Application-specific metrics
-- Custom Grafana dashboards
-- Alerting rules
-- Grafana persistence
+- Linux-based deployment runner
+- Remote Terraform backend
+- Multi-host monitoring
+- Additional application metrics
 - Expanded Ansible automation
-- CI/CD enhancements
-- Additional platform engineering scenarios
+- Container persistence
 
 ---
 
 ## Purpose
 
-Platforms Lab is intended to be a practical, hands-on environment for learning and demonstrating DevOps, Infrastructure, Monitoring, and Platform Engineering skills through reproducible, code-driven infrastructure.
+Platforms Lab is intended to be a practical, hands-on environment for learning and demonstrating Platform Engineering, DevOps, Monitoring, Observability, and Infrastructure Automation skills through reproducible, code-driven infrastructure.
