@@ -1,4 +1,4 @@
-name: Validate DevOps In-Tray
+name: Validate platforms-lab
 
 on:
   push:
