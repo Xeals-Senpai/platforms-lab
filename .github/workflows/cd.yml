@@ -40,6 +40,9 @@ jobs:
       - name: Terraform validate
         run: terraform -chdir=terraform validate
 
+      - name: Show Terraform state
+        run: terraform -chdir=terraform state list
+
       - name: Terraform plan
         run: terraform -chdir=terraform plan
 
