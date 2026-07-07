@@ -103,8 +103,9 @@ Configuration is provisioned automatically through:
 
 - Datasources as code
 - Dashboards as code
+- Alert rules as code
 
-No manual dashboard creation is required after deployment.
+No manual dashboard or alert creation is required after deployment.
 
 ### Ansible
 
@@ -161,6 +162,13 @@ Current scrape targets:
 
 - Flask application (`web-container`)
 - Windows Exporter (`host.docker.internal:9182`)
+
+
+### Grafana Alert Provisioning
+
+Grafana alert rules are stored in `grafana/provisioning/alerting/flask-alert-rules.yml` and are loaded automatically from the existing Grafana provisioning mount at container startup. The provisioned rules reuse the `Prometheus` datasource UID (`prometheus`) and cover the Flask service down, slow response time, high CPU usage, and application error scenarios.
+
+Because the alert definitions live in the repository instead of the Grafana database only, they are restored after `terraform apply`, Docker container recreation, or Grafana container recreation without manual UI configuration. Provisioned alert rules should be changed in code and reloaded by restarting Grafana or using Grafana's provisioning reload API.
 
 ### Grafana Dashboard
 
