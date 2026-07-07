@@ -1,7 +1,6 @@
 # terraform/variables.tf
 
-variable "project_name" {
-  description = "Name used for local Docker resources."
+variable "platforms_lab_root" {
+  description = "Absolute path to the platforms-lab repository root on the machine running Terraform"
   type        = string
-  default     = "platforms-lab"
 }

@@ -53,7 +53,7 @@ resource "docker_container" "prometheus" {
   }
 
   volumes {
-    host_path      = abspath("${path.module}/../prometheus/prometheus.yml")
+    host_path      = "${var.platforms_lab_root}/prometheus/prometheus.yml"
     container_path = "/etc/prometheus/prometheus.yml"
   }
 }
@@ -72,12 +72,12 @@ resource "docker_container" "grafana" {
   }
 
   volumes {
-    host_path      = abspath("${path.module}/../grafana/provisioning")
+    host_path      = "${var.platforms_lab_root}/grafana/provisioning"
     container_path = "/etc/grafana/provisioning"
   }
 
   volumes {
-    host_path      = abspath("${path.module}/../grafana/dashboards")
+    host_path      = "${var.platforms_lab_root}/grafana/dashboards"
     container_path = "/var/lib/grafana/dashboards"
   }
 }
