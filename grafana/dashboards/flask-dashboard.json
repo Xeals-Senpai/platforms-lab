@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -233,18 +233,7 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "1": {
-                  "color": "green",
-                  "index": 0,
-                  "text": "1.1.0"
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -277,7 +266,7 @@
           "values": false
         },
         "showPercentChange": false,
-        "textMode": "auto",
+        "textMode": "name",
         "wideLayout": true
       },
       "pluginVersion": "12.0.1+security-01",
@@ -285,7 +274,7 @@
         {
           "editorMode": "code",
           "expr": "platforms_app_info",
-          "legendFormat": "__auto",
+          "legendFormat": "{{version}}",
           "range": true,
           "refId": "A"
         }
