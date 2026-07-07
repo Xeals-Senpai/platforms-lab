@@ -13,6 +13,9 @@ jobs:
       - self-hosted
       - deployment-runner
 
+    env:
+      TF_VAR_platforms_lab_root: C:/actions-runner/_work/platforms-lab/platforms-lab
+
     defaults:
       run:
         shell: powershell -ExecutionPolicy Bypass -File {0}
