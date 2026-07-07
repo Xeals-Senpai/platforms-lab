@@ -3,7 +3,7 @@ apiVersion: 1
 groups:
   - orgId: 1
     name: Flask Application Alerts
-    folder: Platform Alerts
+    folder: Windows
     interval: 1m
     rules:
       - uid: flask-service-down
