@@ -108,7 +108,7 @@ groups:
                 type: prometheus
                 uid: prometheus
               editorMode: code
-              expr: rate(web_request_duration_seconds_sum[1m]) / rate(web_request_duration_seconds_count[1m])
+              expr: rate(web_request_duration_seconds_sum{job="platforms-web"}[1m]) / rate(web_request_duration_seconds_count{job="platforms-web"}[1m])
               instant: true
               intervalMs: 1000
               legendFormat: Average response time
@@ -258,7 +258,7 @@ groups:
                 type: prometheus
                 uid: prometheus
               editorMode: code
-              expr: increase(web_errors_total[1m])
+              expr: increase(web_errors_total{job="platforms-web"}[1m])
               instant: true
               intervalMs: 1000
               legendFormat: Application errors
