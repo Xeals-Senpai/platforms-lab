@@ -108,7 +108,7 @@ groups:
                 type: prometheus
                 uid: prometheus
               editorMode: code
-              expr: rate(web_request_duration_seconds_sum{job="platforms-web"}[1m]) / rate(web_request_duration_seconds_count{job="platforms-web"}[1m])
+              expr: rate(web_request_duration_seconds_sum{job="platforms-web"}[5m]) / rate(web_request_duration_seconds_count{job="platforms-web"}[5m])
               instant: true
               intervalMs: 1000
               legendFormat: Average response time
@@ -158,7 +158,7 @@ groups:
               maxDataPoints: 43200
               refId: C
               type: threshold
-        noDataState: NoData
+        noDataState: Normal
         execErrState: Error
         for: 2m
         annotations:
@@ -183,7 +183,7 @@ groups:
                 type: prometheus
                 uid: prometheus
               editorMode: code
-              expr: rate(process_cpu_seconds_total{job="platforms-web"}[1m])
+              expr: rate(process_cpu_seconds_total{job="platforms-web"}[5m])
               instant: true
               intervalMs: 1000
               legendFormat: Flask CPU usage
@@ -258,7 +258,7 @@ groups:
                 type: prometheus
                 uid: prometheus
               editorMode: code
-              expr: increase(web_errors_total{job="platforms-web"}[1m])
+              expr: increase(web_errors_total{job="platforms-web"}[5m])
               instant: true
               intervalMs: 1000
               legendFormat: Application errors

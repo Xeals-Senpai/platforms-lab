@@ -366,7 +366,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "increase(web_errors_total[1m])",
+          "expr": "increase(web_errors_total[5m])",
           "legendFormat": "{{job}}",
           "range": true,
           "refId": "A"
@@ -458,7 +458,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "rate(web_requests_total[1m])",
+          "expr": "rate(web_requests_total[5m])",
           "legendFormat": "{{job}}",
           "range": true,
           "refId": "A"
@@ -645,7 +645,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "rate(process_cpu_seconds_total{job=\"platforms-web\"}[1m])",
+          "expr": "rate(process_cpu_seconds_total{job=\"platforms-web\"}[5m])",
           "legendFormat": "{{job}}",
           "range": true,
           "refId": "A"
@@ -734,7 +734,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "rate(web_request_duration_seconds_sum[1m])\r\n/\r\nrate(web_request_duration_seconds_count[1m])",
+          "expr": "rate(web_request_duration_seconds_sum[5m])\r\n/\r\nrate(web_request_duration_seconds_count[5m])",
           "legendFormat": "{{job}}",
           "range": true,
           "refId": "A"
