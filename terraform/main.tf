@@ -67,7 +67,7 @@ resource "docker_container" "grafana" {
   }
 
   env = [
-  "DISCORD_WEBHOOK_URL=${var.discord_webhook_url}"
+    "DISCORD_WEBHOOK_URL=${var.discord_webhook_url}"
   ]
 
   ports {
