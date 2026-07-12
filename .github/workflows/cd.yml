@@ -15,6 +15,7 @@ jobs:
 
     env:
       TF_VAR_platforms_lab_root: C:/actions-runner/_work/platforms-lab/platforms-lab
+      TF_VAR_discord_webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
     defaults:
       run:

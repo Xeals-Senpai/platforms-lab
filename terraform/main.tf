@@ -66,6 +66,10 @@ resource "docker_container" "grafana" {
     name = docker_network.platforms_lab.name
   }
 
+  env = [
+  "DISCORD_WEBHOOK_URL=${var.discord_webhook_url}"
+  ]
+
   ports {
     internal = 3000
     external = 3000
